@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Scrollshot",
+  "version": "1.0.0",
+  "description": "Scroll, stitch, copy. Capture the full page, the viewport, a dragged region or a single element — straight to your clipboard.",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage",
+    "clipboardWrite"
+  ],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Scrollshot — capture this page"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "commands": {
+    "capture-fullpage": {
+      "suggested_key": { "default": "Alt+Shift+P" },
+      "description": "Capture full page to clipboard"
+    },
+    "capture-viewport": {
+      "suggested_key": { "default": "Alt+Shift+V" },
+      "description": "Capture visible viewport to clipboard"
+    }
+  }
+}

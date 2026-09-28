@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Scrollshot — capture preview</title>
+  <style>
+    :root { color-scheme: light dark; --line: #d8dce4; --muted: #6b7280; --accent: #6d4aff;
+            --grad: linear-gradient(135deg, #7c4dff, #2f9dff); }
+    @media (prefers-color-scheme: dark) { :root { --line: #2a2e37; --muted: #9aa3b2; --accent: #9b7dff;
+            --grad: linear-gradient(135deg, #9b7dff, #58b6ff); } }
+    body { margin: 0; padding: 20px; font: 14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+    header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+    h1 { font-size: 16px; margin: 0; margin-right: auto; }
+    button { padding: 7px 13px; border: 1px solid var(--line); border-radius: 8px; background: transparent; color: inherit; font: inherit; cursor: pointer; }
+    button.primary { background: var(--grad); border-color: transparent; color: #fff; }
+    #note, #meta { color: var(--muted); font-size: 12px; }
+    #shot { max-width: 100%; border: 1px solid var(--line); border-radius: 8px; display: block; }
+    #empty { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Scrollshot — capture preview</h1>
+    <span id="meta"></span>
+    <button id="copy" class="primary">Copy to clipboard</button>
+    <button id="save">Save PNG</button>
+  </header>
+  <p id="note"></p>
+  <p id="empty" hidden>Nothing captured yet — take a screenshot from the toolbar button first.</p>
+  <img id="shot" alt="Captured screenshot" hidden />
+  <script src="preview.js"></script>
+</body>
+</html>

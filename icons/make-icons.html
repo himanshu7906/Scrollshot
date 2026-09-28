@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Scrollshot — icon builder</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { margin: 0; padding: 32px; font: 14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  h1 { font-size: 18px; margin: 0 0 4px; }
+  p { color: #6b7280; margin: 0 0 20px; max-width: 60ch; }
+  .sizes { display: flex; align-items: flex-end; gap: 26px; flex-wrap: wrap; margin-bottom: 24px; }
+  figure { margin: 0; text-align: center; }
+  figcaption { margin-top: 8px; font-size: 12px; color: #6b7280; }
+  button { padding: 9px 16px; border: 0; border-radius: 9px; cursor: pointer; font: inherit; color: #fff;
+           background: linear-gradient(135deg, #7c4dff, #2f9dff); }
+  code { background: rgba(127,127,127,.16); padding: 1px 5px; border-radius: 4px; }
+  ol { max-width: 62ch; color: #6b7280; }
+</style>
+</head>
+<body>
+  <h1>Scrollshot icon builder</h1>
+  <p>Chrome only accepts raster icons, so render the logo to PNG here, then drop the files back into this <code>icons/</code> folder.</p>
+
+  <div class="sizes" id="sizes"></div>
+  <button id="download">Download all PNGs</button>
+
+  <ol>
+    <li>Click <strong>Download all PNGs</strong> — four files land in your Downloads folder.</li>
+    <li>Move <code>icon-16.png</code>, <code>icon-32.png</code>, <code>icon-48.png</code> and <code>icon-128.png</code> into this <code>icons/</code> folder.</li>
+    <li>Rename <code>manifest.chrome-with-icons.json</code> to <code>manifest.json</code> (keep a copy of the old one), then reload the extension.</li>
+  </ol>
+
+<script>
+const SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <defs>
+    <linearGradient id="ss-page" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7c4dff"/><stop offset="1" stop-color="#2f9dff"/>
+    </linearGradient>
+    <linearGradient id="ss-lens" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#22c1ff"/><stop offset="1" stop-color="#6d4aff"/>
+    </linearGradient>
+    <mask id="ss-cut">
+      <rect width="48" height="48" fill="#fff"/>
+      <circle cx="33" cy="33" r="15.5" fill="#000"/>
+    </mask>
+  </defs>
+  <g mask="url(#ss-cut)">
+    <rect x="6.5" y="3.5" width="26" height="41" rx="5" fill="none" stroke="url(#ss-page)" stroke-width="3.4"/>
+    <g stroke="url(#ss-page)" stroke-width="3" stroke-linecap="round">
+      <path d="M13 13.5h13"/><path d="M13 21h13"/><path d="M13 28.5h8"/>
+    </g>
+  </g>
+  <circle cx="33" cy="33" r="11.5" fill="url(#ss-lens)"/>
+  <g stroke="#fff" stroke-width="2.6" stroke-linecap="round">
+    <path d="M33 28.4V21.6"/><path d="m36.9 35.2 5.9 3.4"/><path d="m29.1 35.2-5.9 3.4"/>
+  </g>
+  <circle cx="33" cy="33" r="4.2" fill="#fff"/>
+</svg>`;
+
+const SIZES = [16, 32, 48, 128];
+const canvases = new Map();
+
+function loadImage() {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(SVG);
+  });
+}
+
+(async function render() {
+  const img = await loadImage();
+  const host = document.getElementById('sizes');
+  for (const size of SIZES) {
+    const canvas = document.createElement('canvas');
+    canvas.width = canvas.height = size;
+    canvas.getContext('2d').drawImage(img, 0, 0, size, size);
+    canvases.set(size, canvas);
+
+    const figure = document.createElement('figure');
+    figure.append(canvas);
+    const caption = document.createElement('figcaption');
+    caption.textContent = `${size}×${size}`;
+    figure.append(caption);
+    host.append(figure);
+  }
+})();
+
+document.getElementById('download').addEventListener('click', () => {
+  SIZES.forEach((size, index) => {
+    setTimeout(() => {
+      canvases.get(size).toBlob((blob) => {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `icon-${size}.png`;
+        link.click();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }, 'image/png');
+    }, index * 250);
+  });
+});
+</script>
+</body>
+</html>

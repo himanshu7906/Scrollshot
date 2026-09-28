@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="popup.css" />
+  <title>Scrollshot</title>
+</head>
+<body>
+  <header>
+    <svg class="logo" viewBox="0 0 48 48" aria-hidden="true">
+      <defs>
+        <linearGradient id="ss-page" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#7c4dff"/><stop offset="1" stop-color="#2f9dff"/>
+        </linearGradient>
+        <linearGradient id="ss-lens" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#22c1ff"/><stop offset="1" stop-color="#6d4aff"/>
+        </linearGradient>
+        <mask id="ss-cut">
+          <rect width="48" height="48" fill="#fff"/>
+          <circle cx="33" cy="33" r="15.5" fill="#000"/>
+        </mask>
+      </defs>
+      <g mask="url(#ss-cut)">
+        <rect x="6.5" y="3.5" width="26" height="41" rx="5" fill="none" stroke="url(#ss-page)" stroke-width="3.4"/>
+        <g stroke="url(#ss-page)" stroke-width="3" stroke-linecap="round">
+          <path d="M13 13.5h13"/><path d="M13 21h13"/><path d="M13 28.5h8"/>
+        </g>
+      </g>
+      <circle cx="33" cy="33" r="11.5" fill="url(#ss-lens)"/>
+      <g stroke="#fff" stroke-width="2.6" stroke-linecap="round">
+        <path d="M33 28.4V21.6"/><path d="m36.9 35.2 5.9 3.4"/><path d="m29.1 35.2-5.9 3.4"/>
+      </g>
+      <circle cx="33" cy="33" r="4.2" fill="#fff"/>
+    </svg>
+    <div class="wordmark">
+      <h1>Scrollshot</h1>
+      <p>Scroll, stitch, copy.</p>
+    </div>
+  </header>
+
+  <div class="modes">
+    <button class="mode" data-mode="fullpage">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
+      <span>Full page</span>
+      <em>Entire scrolling page</em>
+    </button>
+    <button class="mode" data-mode="viewport">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20"/></svg>
+      <span>Viewport</span>
+      <em>What you can see now</em>
+    </button>
+    <button class="mode" data-mode="region">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8V5a2 2 0 0 1 2-2h3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M21 16v3a2 2 0 0 1-2 2h-3"/></svg>
+      <span>Region</span>
+      <em>Drag to select an area</em>
+    </button>
+    <button class="mode" data-mode="element">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="12" height="10" rx="2"/><path d="m13 13 8 8M13 21v-8h8"/></svg>
+      <span>Element</span>
+      <em>Click a single element</em>
+    </button>
+  </div>
+
+  <details class="options">
+    <summary>Options</summary>
+    <label class="row">
+      <input type="checkbox" id="hideFixed" checked />
+      <span>Hide sticky headers while scrolling</span>
+    </label>
+    <label class="row">
+      <span>Settle delay</span>
+      <input type="range" id="settle" min="0" max="800" step="20" value="120" />
+      <output id="settleOut">120 ms</output>
+    </label>
+  </details>
+
+  <div id="status" class="status" hidden>
+    <div class="bar"><i></i></div>
+    <p id="statusText"></p>
+  </div>
+
+  <footer>
+    <button id="openPreview" class="link" hidden>Open last capture</button>
+    <span class="shortcut">Alt+Shift+P full page · Alt+Shift+V viewport</span>
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>
